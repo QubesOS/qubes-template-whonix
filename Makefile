@@ -42,9 +42,42 @@ import-whonix-keys:
 	    touch "$$GNUPGHOME/pubring.gpg"; \
 	fi
 
+WHONIX_COMPONENTS := Whonix
+GIT_URL_Whonix = https://github.com/Whonix/Whonix.git
+BRANCH_Whonix = 9.6
+
+# qubes-whonix
+WHONIX_COMPONENTS += qubes-whonix
+#GIT_URL_qubes_whonix = https://github.com/Whonix/qubes-whonix.git
+#BRANCH_qubes_whonix = 9.6.2
+GIT_URL_qubes_whonix = https://github.com/nrgaway/qubes-whonix.git
+BRANCH_qubes_whonix = master
+
+# whonix-setup-wizard
+WHONIX_COMPONENTS += whonix-setup-wizard
+GIT_URL_whonix_setup_wizard = https://github.com/Whonix/whonix-setup-wizard.git
+BRANCH_whonix_setup_wizard = 0.7-1
+
+WHONIX_COMPONENTS += whonix-repository
+GIT_URL_whonix_repository = https://github.com/Whonix/whonix-repository.git
+BRANCH_whonix_repository = 1.1-1
+
+# python-guimessages
+WHONIX_COMPONENTS += python-guimessages
+GIT_URL_python_guimessages = https://github.com/Whonix/python-guimessages.git
+BRANCH_python_guimessages = 0.3-1
+
 .PHONY: get-sources
+get-sources: GIT_REPOS := $(addprefix $(SRC_DIR)/,$(WHONIX_COMPONENTS))
 get-sources:
-	@true
+	@set -a; \
+	SCRIPT_DIR=$(CURDIR)/scripts; \
+	SRC_ROOT=$(CURDIR)/$(SRC_DIR); \
+	for REPO in $(GIT_REPOS); do \
+		if [ ! -d $$REPO ]; then \
+			$$SCRIPT_DIR/get-sources $$REPO; \
+		fi; \
+	done
 
 .PHONY: import-keys
 import-keys: import-whonix-keys
