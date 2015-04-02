@@ -25,22 +25,20 @@ all:
 # Prompt to confirm import of Whonix keys
 .PHONY: import-whonix-keys
 import-whonix-keys:
-	@if [ "$$WHONIX" == "1" ]; then \
-	    export GNUPGHOME="$(PWD)/keyrings/git"; \
-            if ! gpg --list-keys 916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA >/dev/null 2>&1; then \
-                echo "**********************************************************"; \
-                echo "*** You've selected Whonix build, this will import     ***"; \
-                echo "*** Whonix code signing key to qubes-builder, globally ***"; \
-                echo "**********************************************************"; \
-                echo -n "Do you want to continue? (y/N) "; \
-                read answer; \
-                [ "$$answer" == "y" ] || exit 1; \
-                echo '916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA:6:' | gpg --import-ownertrust; \
-                gpg --import $(PWD)/$(SRC_DIR)/template-whonix/keys/whonix-developer-patrick.asc; \
-                gpg --list-keys; \
-            fi; \
-	    touch "$$GNUPGHOME/pubring.gpg"; \
-	fi
+	export GNUPGHOME="$(BUILDER_DIR)/keyrings/git"; \
+	if ! gpg --list-keys 916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA >/dev/null 2>&1; then \
+	    echo "**********************************************************"; \
+	    echo "*** You've selected Whonix build, this will import     ***"; \
+	    echo "*** Whonix code signing key to qubes-builder, globally ***"; \
+	    echo "**********************************************************"; \
+	    echo -n "Do you want to continue? (y/N) "; \
+	    read answer; \
+	    [ "$$answer" == "y" ] || exit 1; \
+	    echo '916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA:6:' | gpg --import-ownertrust; \
+	    gpg --import $(BUILDER_DIR)/$(SRC_DIR)/template-whonix/keys/whonix-developer-patrick.asc; \
+	    gpg --list-keys; \
+	fi; \
+	touch "$$GNUPGHOME/pubring.gpg"
 
 WHONIX_COMPONENTS := Whonix
 GIT_URL_Whonix = https://github.com/Whonix/Whonix.git
@@ -67,24 +65,29 @@ WHONIX_COMPONENTS += python-guimessages
 GIT_URL_python_guimessages = https://github.com/Whonix/python-guimessages.git
 BRANCH_python_guimessages = 0.3-1
 
-.PHONY: get-sources
-get-sources: GIT_REPOS := $(addprefix $(SRC_DIR)/,$(WHONIX_COMPONENTS))
-get-sources:
-	@set -a; \
-	SCRIPT_DIR=$(CURDIR)/scripts; \
-	SRC_ROOT=$(CURDIR)/$(SRC_DIR); \
-	for REPO in $(GIT_REPOS); do \
-		if [ ! -d $$REPO ]; then \
-			$$SCRIPT_DIR/get-sources $$REPO; \
-		fi; \
-	done
-
+ifndef INCLUDED
 .PHONY: import-keys
 import-keys: import-whonix-keys
 	@true
 
+.PHONY: get-sources
+get-sources: import-keys
+get-sources: GIT_REPOS := $(addprefix $(SRC_DIR)/,$(WHONIX_COMPONENTS))
+get-sources:
+	@set -a; \
+	pushd $(BUILDER_DIR) &> /dev/null; \
+	SCRIPT_DIR=$(BUILDER_DIR)/scripts; \
+	SRC_ROOT=$(BUILDER_DIR)/$(SRC_DIR); \
+	for REPO in $(GIT_REPOS); do \
+		if [ ! -d $$REPO ]; then \
+			$$SCRIPT_DIR/get-sources || exit 1; \
+		fi; \
+	done; \
+	popd &> /dev/null
+
 .PHONY: verify-sources
-verify-sources: import-keys
+verify-sources:
 	@true
+endif
 
 # vim: filetype=make
