@@ -40,30 +40,41 @@ import-whonix-keys:
 	fi; \
 	touch "$$GNUPGHOME/pubring.gpg"
 
-WHONIX_COMPONENTS := Whonix
-GIT_URL_Whonix = https://github.com/Whonix/Whonix.git
-BRANCH_Whonix = 9.6
+WHONIX_COMPONENTS := 
 
 # qubes-whonix
+# -----------------------------------------------------------------------------
+#export GIT_URL_qubes_whonix = https://github.com/Whonix/qubes-whonix.git
+#export BRANCH_qubes_whonix = 9.6.2
+
+# [UPSTREAM REPO]
+export GIT_URL_qubes_whonix = https://github.com/nrgaway/qubes-whonix.git
+export BRANCH_qubes_whonix = master
 WHONIX_COMPONENTS += qubes-whonix
-#GIT_URL_qubes_whonix = https://github.com/Whonix/qubes-whonix.git
-#BRANCH_qubes_whonix = 9.6.2
-GIT_URL_qubes_whonix = https://github.com/nrgaway/qubes-whonix.git
-BRANCH_qubes_whonix = master
+
+# Whonix
+# -----------------------------------------------------------------------------
+export GIT_URL_Whonix = https://github.com/Whonix/Whonix.git
+export BRANCH_Whonix = 9.6
+WHONIX_COMPONENTS += Whonix
 
 # whonix-setup-wizard
+# -----------------------------------------------------------------------------
+export GIT_URL_whonix_setup_wizard = https://github.com/Whonix/whonix-setup-wizard.git
+export BRANCH_whonix_setup_wizard = 0.7-1
 WHONIX_COMPONENTS += whonix-setup-wizard
-GIT_URL_whonix_setup_wizard = https://github.com/Whonix/whonix-setup-wizard.git
-BRANCH_whonix_setup_wizard = 0.7-1
 
+# whonix-repository
+# -----------------------------------------------------------------------------
+export GIT_URL_whonix_repository = https://github.com/Whonix/whonix-repository.git
+export BRANCH_whonix_repository = 1.1-1
 WHONIX_COMPONENTS += whonix-repository
-GIT_URL_whonix_repository = https://github.com/Whonix/whonix-repository.git
-BRANCH_whonix_repository = 1.1-1
 
 # python-guimessages
+# -----------------------------------------------------------------------------
+export GIT_URL_python_guimessages = https://github.com/Whonix/python-guimessages.git
+export BRANCH_python_guimessages = 0.3-1
 WHONIX_COMPONENTS += python-guimessages
-GIT_URL_python_guimessages = https://github.com/Whonix/python-guimessages.git
-BRANCH_python_guimessages = 0.3-1
 
 ifndef INCLUDED
 .PHONY: import-keys
