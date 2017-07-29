@@ -65,8 +65,12 @@ aptUpdate
 [ -n "$tpo_downloader_debug" ] || export tpo_downloader_debug="1"
 
 if [ "${TEMPLATE_FLAVOR}" = "whonix-gateway" ]; then
+   # HACK until https://phabricator.whonix.org/T697 get resolved
+   aptInstall qubes-core-agent-dom0-updates qubes-core-agent-networking qubes-core-agent-passwordless-root
    aptInstall qubes-whonix-gateway
 elif [ "${TEMPLATE_FLAVOR}" = "whonix-workstation" ]; then
+   # HACK until https://phabricator.whonix.org/T697 get resolved
+   aptInstall qubes-core-agent-networking qubes-core-agent-passwordless-root
    aptInstall qubes-whonix-workstation
 else
    error "TEMPLATE_FLAVOR is neither whonix-gateway nor whonix-workstation, it is: ${TEMPLATE_FLAVOR}"
