@@ -6,3 +6,4 @@
 # Environment variables (set in builder.conf) that should be made available to
 # template build scripts
 TEMPLATE_ENV_WHITELIST += WHONIX_APT_REPOSITORY_OPTS WHONIX_ENABLE_TOR WHONIX_DIR
+TEMPLATE_ENV_WHITELIST += tbb_hardcoded_version
