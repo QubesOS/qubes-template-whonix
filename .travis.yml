@@ -16,6 +16,8 @@ before_script:
 #- export REPO_PROXY=http://127.0.0.1:3142
  - export CHECK_BRANCH=1
  - export BRANCH_template_whonix=master
+ - export BRANCH_linux_template_builder=devel
+ - export GIT_URL_linux_template_builder=https://github.com/marmarek/qubes-linux-template-builder
  - export GIT_URL_template_whonix=https://github.com/adrelanos/qubes-template-whonix.git
  - export BUILDER_PLUGINS="template-whonix builder-debian"
  - env
